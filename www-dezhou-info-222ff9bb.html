@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>知识索引 · 德州扑克游戏参考库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f3f7fc;
+            color: #1b2d3b;
+            line-height: 1.6;
+            padding: 1.5rem 1rem 3rem;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        /* 标题区 */
+        .hero {
+            background: linear-gradient(145deg, #e2f0f5 0%, #cde4ee 100%);
+            border-radius: 2rem 2rem 1.5rem 1.5rem;
+            padding: 2.5rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 8px 24px rgba(0, 60, 75, 0.06);
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #0a3845;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            background: rgba(0, 120, 140, 0.12);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            color: #135e6e;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: #1f4d5c;
+        }
+
+        .hero .emph-link {
+            display: inline-block;
+            margin-top: 1.2rem;
+            background: #0b6b7a;
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .hero .emph-link:hover {
+            background: #0a5a68;
+        }
+
+        /* 网格卡片 — 目录感布局 */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.7rem 1.6rem 1.9rem;
+            box-shadow: 0 4px 12px rgba(0, 60, 80, 0.04), 0 1px 3px rgba(0, 40, 50, 0.02);
+            transition: box-shadow 0.2s, transform 0.1s;
+            border-left: 4px solid #48b5c5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 100, 120, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0e4d5b;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+        }
+
+        .card h3 .badge {
+            background: #c0e2ea;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.1rem 0.6rem;
+            border-radius: 30px;
+            color: #0d4f5e;
+        }
+
+        .card p, .card ul {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            color: #244c58;
+        }
+
+        .card ul {
+            padding-left: 1.2rem;
+            list-style-type: "▹  ";
+        }
+
+        .card ul li {
+            margin-bottom: 0.35rem;
+        }
+
+        .card .footnote {
+            margin-top: auto;
+            padding-top: 0.8rem;
+            font-size: 0.8rem;
+            color: #4a7684;
+            border-top: 1px solid #daeaf0;
+        }
+
+        .highlight-card {
+            border-left-color: #1e8f9f;
+            background: #f0f9fc;
+        }
+
+        /* 说明 / 提示 混合区 */
+        .insight-area {
+            background: #dcebf2;
+            border-radius: 1.5rem;
+            padding: 2rem 2rem 2rem 2.2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem 2.5rem;
+        }
+
+        .insight-block {
+            flex: 1 1 220px;
+        }
+
+        .insight-block h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #09404d;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insight-block p {
+            font-size: 0.95rem;
+            color: #1f4b58;
+        }
+
+        .insight-block .tip-badge {
+            background: #51b3c5;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.7rem;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+
+        .insight-block a {
+            color: #095a6b;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: #83c5d2;
+            font-weight: 500;
+        }
+
+        /* FAQ 摘要 + 相关信息区 */
+        .faq-summary {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 50, 60, 0.04);
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-summary h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #094654;
+            margin-bottom: 1rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .faq-item {
+            background: #f0f7fa;
+            padding: 1rem 1.2rem;
+            border-radius: 1rem;
+        }
+
+        .faq-item .q {
+            font-weight: 600;
+            color: #0a4150;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .faq-item .a {
+            font-size: 0.9rem;
+            color: #255b69;
+        }
+
+        .faq-item .a a {
+            color: #066877;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* 底部相关信息 */
+        .related-links {
+            margin-top: 2rem;
+            border-top: 1px solid #c5dbe6;
+            padding-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.5rem 1.8rem;
+            color: #2a5e6d;
+        }
+
+        .related-links span {
+            font-weight: 500;
+        }
+
+        .related-links a, .related-links .fake-link {
+            color: #095a6b;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .related-links .fake-link {
+            text-decoration: none;
+            border-bottom: 1px dashed #70aebb;
+        }
+
+        .footer-note {
+            margin-top: 2.8rem;
+            font-size: 0.8rem;
+            color: #63828f;
+            text-align: center;
+            border-top: 1px solid #cfe0e8;
+            padding-top: 1.8rem;
+        }
+
+        /* 响应式细节 */
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .hero {
+                padding: 1.8rem 1.2rem;
+            }
+            .grid-cards {
+                grid-template-columns: 1fr;
+            }
+            .insight-area {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- hero 区：目录感标题 + 链接自然融入 -->
+    <div class="hero">
+        <h1>
+            📚 德州扑克知识库
+            <small>查阅 · 对照 · 延伸</small>
+        </h1>
+        <p>
+            从基础术语到常用策略，从概率速查到规则对照——这里汇集了关于
+            <a href="https://www-dezhou.com" style="color:#0a4d5e; text-decoration: underline; text-underline-offset: 3px; font-weight:600;">德州扑克游戏</a>
+            的日常查询要点和阅读线索。适合玩家快速定位信息、核对细节，也适合刚接触规则的朋友按图索骥。
+        </p>
+        <a href="https://www-dezhou.com" class="emph-link">德州扑克游戏</a>
+    </div>
+
+    <!-- 网格卡片：四大查询模块 -->
+    <div class="grid-cards">
+        <div class="card">
+            <h3>📋 手牌矩阵 <span class="badge">常查</span></h3>
+            <p>起手牌强度分级、同花/非同花胜率参考、位置与手牌范围。翻前决策常用对照表。</p>
+            <ul>
+                <li>口袋对 & 同花连张</li>
+                <li>高张与 Ax 组合</li>
+                <li>盲注位防守范围</li>
+            </ul>
+            <div class="footnote">🔹 示例：小对子中 set 概率约 12%</div>
+        </div>
+        <div class="card highlight-card">
+            <h3>📐 赔率与概率 <span class="badge">速查</span></h3>
+            <p>听牌赢率、底池赔率、隐含赔率快速心算方法。常见听牌概率对照（转牌/河牌）。</p>
+            <ul>
+                <li>同花听牌（9 outs）</li>
+                <li>顺子听牌（8 outs）</li>
+                <li>卡顺听牌（4 outs）</li>
+            </ul>
+            <div class="footnote">📊 翻牌圈听同花，到河牌成牌概率约 35%</div>
+        </div>
+        <div class="card">
+            <h3>🧠 位置与策略 <span class="badge">对照</span></h3>
+            <p>不同位置（UTG、CO、BTN、盲注）的入池建议与翻后倾向。位置优势与范围调整。</p>
+            <ul>
+                <li>早期位紧，后位宽</li>
+                <li>按钮位偷盲与保护</li>
+                <li>盲注攻防参考</li>
+            </ul>
+            <div class="footnote">♟️ 后位可以多玩 20%-30% 的手牌</div>
+        </div>
+        <div class="card">
+            <h3>📖 常用规则 <span class="badge">延伸</span></h3>
+            <p>庄位、盲注、下注轮次、行动顺序、showdown 规则。常见房间规则差异提示。</p>
+            <ul>
+                <li>无限注 vs 限注</li>
+                <li>全下与边池计算</li>
+                <li>锦标赛盲注结构</li>
+            </ul>
+            <div class="footnote">⚖️ 不同平台规则略有差异，建议赛前确认</div>
+        </div>
+    </div>
+
+    <!-- 提示 + 说明区域（混合布局） -->
+    <div class="insight-area">
+        <div class="insight-block">
+            <h4>💡 查阅提示</h4>
+            <p>牌桌决策往往需要综合手牌强度、位置、对手倾向和底池赔率。知识库卡片提供快速参考点，但实际对局请保持灵活。</p>
+            <p style="margin-top: 0.5rem;"><span class="tip-badge">新手</span> 建议从手牌矩阵和赔率部分入手，逐步积累。</p>
+        </div>
+        <div class="insight-block">
+            <h4>📌 说明</h4>
+            <p>本索引基于常规 6 人桌 / 9 人桌无限注德州扑克。翻前范围推荐参考普遍认知，但不同风格（紧凶、松凶）会有调整。</p>
+            <p style="margin-top: 0.5rem;">关于完整规则和进阶讨论，可以查阅 <a href="https://www-dezhou.com">德州扑克游戏</a> 中的策略文章。</p>
+        </div>
+        <div class="insight-block">
+            <h4>🔍 延伸参考</h4>
+            <p>底池限注奥马哈、短牌、梭哈等变体规则不在此索引范围，但可通过主站侧栏了解差异。</p>
+        </div>
+    </div>
+
+    <!-- FAQ 摘要（精选三条） + 相关信息 -->
+    <div class="faq-summary">
+        <h2>❓ 常见查阅场景 · 摘要</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <span class="q">Q：AK 翻前怎么处理？</span>
+                <span class="a">AK 属于强高张，翻前通常 3-bet / 4-bet 隔离，翻后击中顶对顶踢价值可观。可参考手牌矩阵中关于“非对子强牌”的说明。</span>
+            </div>
+            <div class="faq-item">
+                <span class="q">Q：听花该跟注多少？</span>
+                <span class="a">根据底池赔率：转牌同花听牌胜率约 19.6%，跟注额不超过底池的 24% 通常有利可图（不考虑隐含赔率）。速查卡片中有详细对照。</span>
+            </div>
+            <div class="faq-item">
+                <span class="q">Q：位置到底有多重要？</span>
+                <span class="a">位置优势决定信息量和控制权。后位可以更便宜地看翻牌、更准确地价值下注。许多关于 <a href="https://www-dezhou.com">德州扑克游戏</a> 的基础教程都强调位置是翻后决策的核心变量。</span>
+            </div>
+        </div>
+
+        <!-- 相关信息区 -->
+        <div class="related-links">
+            <span>📎 相关信息</span>
+            <a href="https://www-dezhou.com">德州扑克游戏</a>
+            <span class="fake-link">术语表 · 中英对照</span>
+            <span class="fake-link">胜率计算器</span>
+            <span class="fake-link">锦标赛盲注结构表</span>
+            <span>· 内容持续更新</span>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        索引内容仅供日常查阅和延伸阅读，不构成具体操作建议。牌局有风险，决策需结合实际情况。
+    </div>
+</div>
+</body>
+</html>
